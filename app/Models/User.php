@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+// app/Models/User.php
+use Illuminate\Support\Facades\Storage;
+
 
 class User extends Authenticatable
 {
@@ -22,6 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'imageprofil',
     ];
 
     /**
@@ -46,4 +50,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    
+public function getprofilAttribute($value)
+{
+    if (!$value) {
+        return asset('images/default-profil.jpg');
+    }
+
+    return asset('storage/' . $value);
+}
 }

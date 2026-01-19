@@ -99,6 +99,35 @@ class AuthController extends Controller
             : response()->json(['message' => 'Token invalide'], 400);
     }
 
+       // Déconnexion
+    public function logout(Request $request)
+    {
+    
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Déconnexion réussie'
+        ]);
+    }
+
+
+public function updateProfile(Request $request)
+{
+    $request->validate([
+        'imageprofil' => 'image|mimes:jpg,png,jpeg|max:2048'
+    ]);
+
+    $user = $request->user();
+
+    if ($request->hasFile('imageprofil')) {
+        $path = $request->file('imageprofil')->store('imageprofils', 'public');
+        $user->imageprofil = $path;
+        $user->save();
+    }
+
+    return response()->json($user);
+}
+
     // ========================
     // USER AUTH
     // ========================

@@ -16,7 +16,6 @@ class RouteServiceProvider extends ServiceProvider
                 . '?token=' . $token
                 . '&email=' . urlencode($user->email);
         });
-
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')

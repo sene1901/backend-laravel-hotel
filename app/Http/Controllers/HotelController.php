@@ -8,13 +8,23 @@ use Illuminate\Support\Facades\Storage;
 
 class HotelController extends Controller
 {
-    // LISTE DES HÔTELS
+    // LISTE DES HÔTELS avec URL complète pour l'image
     public function index()
     {
-        return response()->json(Hotel::all());
+        $hotels = Hotel::all()->map(function ($hotel) {
+            return [
+                'id' => $hotel->id,
+                'nom' => $hotel->nom,
+                'adresse' => $hotel->adresse,
+                'prix' => $hotel->prix,
+                'image' => $hotel->image ? asset('storage/' . $hotel->image) : null,
+            ];
+        });
+
+        return response()->json($hotels);
     }
 
-    // CRÉER UN HÔTEL avec upload image
+    // CRÉER UN HÔTEL avec  image
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -24,12 +34,14 @@ class HotelController extends Controller
             'image' => 'nullable|image|max:2048', 
         ]);
 
-        // Gérer l'upload
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('hotels', 'public');
         }
 
         $hotel = Hotel::create($validated);
+
+        
+        $hotel->image = $hotel->image ? asset('storage/' . $hotel->image) : null;
 
         return response()->json($hotel, 201);
     }
@@ -37,6 +49,7 @@ class HotelController extends Controller
     // AFFICHER UN HÔTEL
     public function show(Hotel $hotel)
     {
+        $hotel->image = $hotel->image ? asset('storage/' . $hotel->image) : null;
         return response()->json($hotel);
     }
 
@@ -50,7 +63,6 @@ class HotelController extends Controller
             'image' => 'nullable|image|max:2048',
         ]);
 
-        // Si nouvelle image, supprimer l'ancienne et uploader la nouvelle
         if ($request->hasFile('image')) {
             if ($hotel->image) {
                 Storage::disk('public')->delete($hotel->image);
@@ -59,6 +71,8 @@ class HotelController extends Controller
         }
 
         $hotel->update($validated);
+
+        $hotel->image = $hotel->image ? asset('storage/' . $hotel->image) : null;
 
         return response()->json($hotel);
     }
