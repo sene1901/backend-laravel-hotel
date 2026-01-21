@@ -108,7 +108,7 @@ return [
     'schema' => 'public',
     'sslmode' => 'require',
 ],
-git add
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),
