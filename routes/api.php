@@ -35,7 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->post('/profile/imageprofil', [AuthController::class, 'updateProfile']);
 Route::get('/test-mail', function () {
     \Mail::raw('Test email!', function ($message) {
-        $message->to('tonemaildestinataire@gmail.com')
+        $message->to('sadiopro19@gmail.com')
                 ->subject('Test Laravel Mail');
     });
     return 'Mail envoyé';
