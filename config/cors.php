@@ -7,7 +7,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'https://projet-stage-gestion-hotel.vercel.app/api',
+        'https://projet-stage-gestion-hotel.vercel.app/',
         
     ],
 
